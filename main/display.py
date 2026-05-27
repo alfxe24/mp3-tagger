@@ -15,7 +15,6 @@ class Window:
         tk.Label(self.master, text="Welcome to MP3 Tagger!", font=("TkDefaultFont", 20)).grid(row=0, column=0, padx=10, pady=5)
         tk.Label(self.master, text="Please select a root directory.", font=("TkDefaultFont", 15)).grid(row=1, column=0, padx=10, pady=5)
         self.rootDir = askdirectory()
-        print(self.rootDir)
         self.show_treeview()
 
     def show_treeview(self):
@@ -57,7 +56,6 @@ class Window:
         while current_item_id is not '':
             filename_list.append(self.tree.item(current_item_id, 'text'))
             current_item_id = self.tree.parent(current_item_id)
-            print("Item ID: ", current_item_id)
 
         filename_list.reverse()
         selected_filename = filename_list.pop(0)
@@ -65,7 +63,11 @@ class Window:
         for i in filename_list:
             selected_filename = selected_filename + '\\' + i
 
-        print("Filename: ", selected_filename)
+        self.change_settings(selected_filename)
+
+    def change_settings(self, filename):
+        clear_window(self.master)
+
 
 def clear_window(master):
     for element in master.winfo_children():
