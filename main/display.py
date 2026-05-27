@@ -38,7 +38,7 @@ class Window:
         ysb.grid(row=0, column=1, sticky='ns')
         xsb.grid(row=1, column=0, sticky='ew')
 
-        tk.Button(self.master, text="Select", font=("TkDefaultFont", 15), command=self.treeview_select).grid(row=1, column=0, padx=10, pady=5)
+        tk.Button(self.master, text="Select", font=("TkDefaultFont", 15), command=self.treeview_select).grid(row=2, column=0, padx=10, pady=5)
 
     def process_directory(self, parent, path):
         for p in os.listdir(path):
@@ -66,11 +66,6 @@ class Window:
             selected_filename = selected_filename + '\\' + i
 
         print("Filename: ", selected_filename)
-
-
-
-
-
 
 def clear_window(master):
     for element in master.winfo_children():
