@@ -38,6 +38,8 @@ class Window:
         ysb.grid(row=0, column=1, sticky='ns')
         xsb.grid(row=1, column=0, sticky='ew')
 
+        tk.Button(self.master, text="Select", font=("TkDefaultFont", 15), command=self.treeview_select).grid(row=1, column=0, padx=10, pady=5)
+
     def process_directory(self, parent, path):
         for p in os.listdir(path):
             abspath = os.path.join(path, p)
@@ -45,6 +47,30 @@ class Window:
             oid = self.tree.insert(parent, 'end', text=p, open=False)
             if isdir:
                 self.process_directory(oid, abspath)
+
+    def treeview_select(self):
+        item_id = self.tree.selection()
+
+        filename_list = []
+        current_item_id = item_id
+
+        while current_item_id is not '':
+            filename_list.append(self.tree.item(current_item_id, 'text'))
+            current_item_id = self.tree.parent(current_item_id)
+            print("Item ID: ", current_item_id)
+
+        filename_list.reverse()
+        selected_filename = filename_list.pop(0)
+
+        for i in filename_list:
+            selected_filename = selected_filename + '\\' + i
+
+        print("Filename: ", selected_filename)
+
+
+
+
+
 
 def clear_window(master):
     for element in master.winfo_children():
