@@ -1,7 +1,34 @@
 import os
 import tkinter as tk
+from pathlib import Path
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename, askdirectory
+import glob
+from mutagen.mp3 import MP3
+from mutagen.easyid3 import EasyID3
+import mutagen.id3
+from mutagen.id3 import ID3, TIT2, TIT3, TALB, TPE1, TRCK, TYER
+
+def clear_window(master):
+    for element in master.winfo_children():
+        element.destroy()
+
+def glob_to_array(files):
+    files_list = []
+    for i in range(0, len(files)):
+        files_list.append(MP3(files[i], ID3=EasyID3))
+    return files_list
+
+def stringify_filenames(string):
+    '''
+    Ref for Fix:
+    https://github.com/nushell/nushell/issues/10244
+    '''
+    string = string.replace("[", "[[]")
+    string = string.replace("]", "[]]")
+    string = string.replace("[[[]]", "[[]")
+
+    return string
 
 
 class Window:
@@ -10,6 +37,7 @@ class Window:
         self.rootDir = None
         self.master = master
         self.ask_for_directory()
+        self.current_settings = None
 
     def ask_for_directory(self):
         tk.Label(self.master, text="Welcome to MP3 Tagger!", font=("TkDefaultFont", 20)).grid(row=0, column=0, padx=10, pady=5)
@@ -63,15 +91,40 @@ class Window:
         for i in filename_list:
             selected_filename = selected_filename + '\\' + i
 
+        selected_filename = stringify_filenames(selected_filename)
+
         self.change_settings(selected_filename)
 
     def change_settings(self, filename):
         clear_window(self.master)
+        tk.Label(self.master, text=f"Editing: {filename}", font=("TkDefaultFont", 20)).grid(row=0, column=0, padx=10, pady=5)
 
+        try:
+            files = glob.glob(filename + "/*.mp3")
+            print("Files D: ", files)
+        except:
+            files = glob.glob(filename)
+            print("Files F: ", files)
 
-def clear_window(master):
-    for element in master.winfo_children():
-        element.destroy()
+        files = glob_to_array(files)
+
+        self.display_settings_page(files)
+
+    def display_settings_page(self, files):
+        # tk.Label(self.master,)
+        self.current_settings = Settings(len(files))
+        for i in files:
+            print(i)
+
+class Settings:
+    def __init__(self, length):
+        self.album_artist_list = [tk.StringVar] * length
+        self.title_list = [tk.StringVar] * length
+        self.track_number_list = [tk.StringVar] * length
+        self.genre_list = [tk.StringVar] * length
+        self.album_list = [tk.StringVar] * length
+        self.artist_list = [tk.StringVar] * length
+        self.date_list = [tk.StringVar] * length
 
 def init():
     root = tk.Tk()
