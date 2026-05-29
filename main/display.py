@@ -97,7 +97,6 @@ class Window:
 
     def change_settings(self, filename):
         clear_window(self.master)
-        tk.Label(self.master, text=f"Editing: {filename}", font=("TkDefaultFont", 20)).grid(row=0, column=0, padx=10, pady=5)
 
         try:
             files = glob.glob(filename + "/*.mp3")
@@ -106,25 +105,56 @@ class Window:
             files = glob.glob(filename)
             print("Files F: ", files)
 
-        files = glob_to_array(files)
+        file_elements = glob_to_array(files)
 
         self.display_settings_page(files)
 
     def display_settings_page(self, files):
         # tk.Label(self.master,)
         self.current_settings = Settings(len(files))
-        for i in files:
-            print(i)
+
+        tk.Label(self.master, text="Filename").grid(row=0, column=0, padx=3, pady=3)
+        tk.Label(self.master, text="Album Artist").grid(row=0, column=1, padx=3, pady=3)
+        tk.Label(self.master, text="Title").grid(row=0, column=2, padx=3, pady=3)
+        tk.Label(self.master, text="Track Number (x/y)").grid(row=0, column=3, padx=3, pady=3)
+        tk.Label(self.master, text="Genre").grid(row=0, column=4, padx=3, pady=3)
+        tk.Label(self.master, text="Album").grid(row=0, column=5, padx=3, pady=3)
+        tk.Label(self.master, text="Artist").grid(row=0, column=6, padx=3, pady=3)
+        tk.Label(self.master, text="Year").grid(row=0, column=7, padx=3, pady=3)
+
+        for row in range(len(files)):
+            tk.Label(self.master, text=files[row]).grid(row=row+1, column=0, padx=3, pady=3)
+            tk.Entry(self.master, textvariable=self.current_settings.album_artist_list[row]).grid(row=row+1, column=1, padx=3, pady=3)
+            tk.Entry(self.master, textvariable=self.current_settings.title_list[row]).grid(row=row+1, column=2, padx=3, pady=3)
+            tk.Entry(self.master, textvariable=self.current_settings.track_number_list[row]).grid(row=row+1, column=3, padx=3, pady=3)
+            tk.Entry(self.master, textvariable=self.current_settings.genre_list[row]).grid(row=row+1, column=4, padx=3, pady=3)
+            tk.Entry(self.master, textvariable=self.current_settings.album_list[row]).grid(row=row+1, column=5, padx=3, pady=3)
+            tk.Entry(self.master, textvariable=self.current_settings.artist_list[row]).grid(row=row+1, column=6, padx=3, pady=3)
+            tk.Entry(self.master, textvariable=self.current_settings.date_list[row]).grid(row=row+1, column=7, padx=3, pady=3)
+
+        tk.Button(self.master, command=self.submit_settings, text="Submit").grid(row=len(files)+1, column=0, columnspan=8, pady=5)
+
+    def submit_settings(self):
+        return
 
 class Settings:
     def __init__(self, length):
-        self.album_artist_list = [tk.StringVar] * length
-        self.title_list = [tk.StringVar] * length
-        self.track_number_list = [tk.StringVar] * length
-        self.genre_list = [tk.StringVar] * length
-        self.album_list = [tk.StringVar] * length
-        self.artist_list = [tk.StringVar] * length
-        self.date_list = [tk.StringVar] * length
+        self.album_artist_list = []
+        self.title_list = []
+        self.track_number_list = []
+        self.genre_list = []
+        self.album_list = []
+        self.artist_list = []
+        self.date_list = []
+
+        for i in range(length):
+            self.album_artist_list.append(tk.StringVar())
+            self.title_list.append(tk.StringVar())
+            self.track_number_list.append(tk.StringVar())
+            self.genre_list.append(tk.StringVar())
+            self.album_list.append(tk.StringVar())
+            self.artist_list.append(tk.StringVar())
+            self.date_list.append(tk.StringVar())
 
 def init():
     root = tk.Tk()
