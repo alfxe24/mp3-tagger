@@ -33,6 +33,7 @@ def stringify_filenames(string):
 
 class Window:
     def __init__(self, master):
+        self.file_elements = None
         self.tree = None
         self.rootDir = None
         self.master = master
@@ -105,7 +106,7 @@ class Window:
             files = glob.glob(filename)
             print("Files F: ", files)
 
-        file_elements = glob_to_array(files)
+        self.file_elements = glob_to_array(files)
 
         self.display_settings_page(files)
 
@@ -116,7 +117,7 @@ class Window:
         tk.Label(self.master, text="Filename").grid(row=0, column=0, padx=3, pady=3)
         tk.Label(self.master, text="Album Artist").grid(row=0, column=1, padx=3, pady=3)
         tk.Label(self.master, text="Title").grid(row=0, column=2, padx=3, pady=3)
-        tk.Label(self.master, text="Track Number (x/y)").grid(row=0, column=3, padx=3, pady=3)
+        tk.Label(self.master, text="Track Number").grid(row=0, column=3, padx=3, pady=3)
         tk.Label(self.master, text="Genre").grid(row=0, column=4, padx=3, pady=3)
         tk.Label(self.master, text="Album").grid(row=0, column=5, padx=3, pady=3)
         tk.Label(self.master, text="Artist").grid(row=0, column=6, padx=3, pady=3)
@@ -135,7 +136,15 @@ class Window:
         tk.Button(self.master, command=self.submit_settings, text="Submit").grid(row=len(files)+1, column=0, columnspan=8, pady=5)
 
     def submit_settings(self):
-        return
+        for file in range(0, len(self.file_elements)):
+            self.file_elements[file]['albumartist'] = [str(self.current_settings.album_artist_list[file].get())]
+            self.file_elements[file]['title'] = [str(self.current_settings.title_list[file].get())]
+            self.file_elements[file]['tracknumber'] = [str(self.current_settings.track_number_list[file].get()) + "/" + str(len(self.file_elements))]
+            self.file_elements[file]['genre'] = [str(self.current_settings.genre_list[file].get())]
+            self.file_elements[file]['album'] = [str(self.current_settings.album_list[file].get())]
+            self.file_elements[file]['artist'] = [str(self.current_settings.artist_list[file].get())]
+            self.file_elements[file]['date'] = [str(self.current_settings.date_list[file].get())]
+            self.file_elements[file].save()
 
 class Settings:
     def __init__(self, length):
