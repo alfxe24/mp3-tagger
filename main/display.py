@@ -134,6 +134,10 @@ class Window:
             tk.Entry(self.master, textvariable=self.current_settings.date_list[row]).grid(row=row+1, column=7, padx=3, pady=3)
 
         tk.Button(self.master, command=self.submit_settings, text="Submit").grid(row=len(files)+1, column=0, columnspan=8, pady=5)
+        tk.Button(self.master, command=self.back_to_treeview, text="Back").grid(row=len(files)+2, column=0, columnspan=8, pady=5)
+
+    def back_to_treeview(self):
+        self.show_treeview()
 
     def submit_settings(self):
         for file in range(0, len(self.file_elements)):
