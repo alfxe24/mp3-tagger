@@ -83,7 +83,7 @@ class Window:
         filename_list = []
         current_item_id = item_id
 
-        while current_item_id is not '':
+        while current_item_id != '':
             filename_list.append(self.tree.item(current_item_id, 'text'))
             current_item_id = self.tree.parent(current_item_id)
 
@@ -183,13 +183,20 @@ class Window:
     def submit_settings(self):
         try:
             for file in range(0, len(self.file_elements)):
-                self.file_elements[file]['albumartist'] = [str(self.current_settings.album_artist_list[file].get())]
-                self.file_elements[file]['title'] = [str(self.current_settings.title_list[file].get())]
-                self.file_elements[file]['tracknumber'] = [str(self.current_settings.track_number_list[file].get()) + "/" + str(len(self.file_elements))]
-                self.file_elements[file]['genre'] = [str(self.current_settings.genre_list[file].get())]
-                self.file_elements[file]['album'] = [str(self.current_settings.album_list[file].get())]
-                self.file_elements[file]['artist'] = [str(self.current_settings.artist_list[file].get())]
-                self.file_elements[file]['date'] = [str(self.current_settings.date_list[file].get())]
+                if str(self.current_settings.album_artist_list[file].get()) != "":
+                    self.file_elements[file]['albumartist'] = [str(self.current_settings.album_artist_list[file].get())]
+                if str(self.current_settings.title_list[file].get()) != "":
+                    self.file_elements[file]['title'] = [str(self.current_settings.title_list[file].get())]
+                if str(self.current_settings.track_number_list[file].get()) != "":
+                    self.file_elements[file]['tracknumber'] = [str(self.current_settings.track_number_list[file].get()) + "/" + str(len(self.file_elements))]
+                if str(self.current_settings.genre_list[file].get()) != "":
+                    self.file_elements[file]['genre'] = [str(self.current_settings.genre_list[file].get())]
+                if str(self.current_settings.album_list[file].get()) != "":
+                    self.file_elements[file]['album'] = [str(self.current_settings.album_list[file].get())]
+                if str(self.current_settings.artist_list[file].get()) != "":
+                    self.file_elements[file]['artist'] = [str(self.current_settings.artist_list[file].get())]
+                if str(self.current_settings.date_list[file].get()) != "":
+                    self.file_elements[file]['date'] = [str(self.current_settings.date_list[file].get())]
                 self.file_elements[file].save()
             messagebox.showinfo("Success!", "Success: It worked!")
         except:

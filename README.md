@@ -12,3 +12,5 @@ First, select the root directory (folder) of your music files / folders. This wi
 Next, you will have a list of the .mp3 files accessible from within that folder. From here, you can input the information you want to change. To use the autofill, enter text in the bottom entry box of the column you want to autofill, and press the `Fill Above` button for that row. Once you are happy, press `Submit` to submit your changes.
 
 From here you can press the `Back` button to be brought back to the root directory you selected to allow you to edit more files.
+
+NOTE: The editor will only change non-blank entry boxes, so don't feel the need to fill them all.
