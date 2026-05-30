@@ -1,5 +1,6 @@
 import os
 import tkinter as tk
+from tkinter import messagebox
 from pathlib import Path
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename, askdirectory
@@ -133,22 +134,67 @@ class Window:
             tk.Entry(self.master, textvariable=self.current_settings.artist_list[row]).grid(row=row+1, column=6, padx=3, pady=3)
             tk.Entry(self.master, textvariable=self.current_settings.date_list[row]).grid(row=row+1, column=7, padx=3, pady=3)
 
-        tk.Button(self.master, command=self.submit_settings, text="Submit").grid(row=len(files)+1, column=0, columnspan=8, pady=5)
-        tk.Button(self.master, command=self.back_to_treeview, text="Back").grid(row=len(files)+2, column=0, columnspan=8, pady=5)
+        tk.Label(self.master, text="Fill w/ Last Entry").grid(row=len(files)+1, column=0, padx=3, pady=3)
+        tk.Button(self.master, text="Fill Above", command=lambda: self.autofill('albumartist', len(files))).grid(row=len(files)+1, column=1)
+        tk.Button(self.master, text="Fill Above", command=lambda: self.autofill('title', len(files))).grid(row=len(files)+1, column=2)
+        tk.Button(self.master, text="Fill Above", command=lambda: self.autofill('tracknumber', len(files))).grid(row=len(files)+1, column=3)
+        tk.Button(self.master, text="Fill Above", command=lambda: self.autofill('genre', len(files))).grid(row=len(files)+1, column=4)
+        tk.Button(self.master, text="Fill Above", command=lambda: self.autofill('album', len(files))).grid(row=len(files)+1, column=5)
+        tk.Button(self.master, text="Fill Above", command=lambda: self.autofill('artist', len(files))).grid(row=len(files)+1, column=6)
+        tk.Button(self.master, text="Fill Above", command=lambda: self.autofill('date', len(files))).grid(row=len(files)+1, column=7)
+
+        tk.Button(self.master, command=self.submit_settings, text="Submit").grid(row=len(files)+2, column=0, columnspan=8, pady=5)
+        tk.Button(self.master, command=self.back_to_treeview, text="Back").grid(row=len(files)+3, column=0, columnspan=8, pady=5)
+
+    def autofill(self, col, length):
+        match col:
+            case 'albumartist':
+                value = (self.current_settings.album_artist_list[length-1]).get()
+                for column in range(len(self.current_settings.album_artist_list)):
+                    self.current_settings.album_artist_list[column].set(value)
+            case 'title':
+                value = (self.current_settings.title_list[length-1]).get()
+                for column in range(len(self.current_settings.title_list)):
+                    self.current_settings.title_list[column].set(value)
+            case 'tracknumber':
+                value = (self.current_settings.track_number_list[length-1]).get()
+                for column in range(len(self.current_settings.track_number_list)):
+                    self.current_settings.track_number_list[column].set(value)
+            case 'genre':
+                value = (self.current_settings.genre_list[length-1]).get()
+                for column in range(len(self.current_settings.genre_list)):
+                    self.current_settings.genre_list[column].set(value)
+            case 'album':
+                value = (self.current_settings.album_list[length-1]).get()
+                for column in range(len(self.current_settings.album_list)):
+                    self.current_settings.album_list[column].set(value)
+            case 'artist':
+                value = (self.current_settings.artist_list[length-1]).get()
+                for column in range(len(self.current_settings.artist_list)):
+                    self.current_settings.artist_list[column].set(value)
+            case 'date':
+                value = (self.current_settings.date_list[length-1]).get()
+                for column in range(len(self.current_settings.date_list)):
+                    self.current_settings.date_list[column].set(value)
 
     def back_to_treeview(self):
         self.show_treeview()
 
     def submit_settings(self):
-        for file in range(0, len(self.file_elements)):
-            self.file_elements[file]['albumartist'] = [str(self.current_settings.album_artist_list[file].get())]
-            self.file_elements[file]['title'] = [str(self.current_settings.title_list[file].get())]
-            self.file_elements[file]['tracknumber'] = [str(self.current_settings.track_number_list[file].get()) + "/" + str(len(self.file_elements))]
-            self.file_elements[file]['genre'] = [str(self.current_settings.genre_list[file].get())]
-            self.file_elements[file]['album'] = [str(self.current_settings.album_list[file].get())]
-            self.file_elements[file]['artist'] = [str(self.current_settings.artist_list[file].get())]
-            self.file_elements[file]['date'] = [str(self.current_settings.date_list[file].get())]
-            self.file_elements[file].save()
+        try:
+            for file in range(0, len(self.file_elements)):
+                self.file_elements[file]['albumartist'] = [str(self.current_settings.album_artist_list[file].get())]
+                self.file_elements[file]['title'] = [str(self.current_settings.title_list[file].get())]
+                self.file_elements[file]['tracknumber'] = [str(self.current_settings.track_number_list[file].get()) + "/" + str(len(self.file_elements))]
+                self.file_elements[file]['genre'] = [str(self.current_settings.genre_list[file].get())]
+                self.file_elements[file]['album'] = [str(self.current_settings.album_list[file].get())]
+                self.file_elements[file]['artist'] = [str(self.current_settings.artist_list[file].get())]
+                self.file_elements[file]['date'] = [str(self.current_settings.date_list[file].get())]
+                self.file_elements[file].save()
+            messagebox.showinfo("Success!", "Success: It worked!")
+        except:
+            messagebox.showerror("Error!", "Error: Something went wrong but I don't know what, sorry :/")
+
 
 class Settings:
     def __init__(self, length):
